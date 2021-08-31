@@ -8,31 +8,27 @@
 
 import UIKit
 
-/*
- int calc_fat_cals(double fat, int total_cals){
-     return (int)((fat/100)*(total_cals));
- }
- */
-
+//These are the activity levels based on users activity level
 let sedentary = 1.2
 let lightly = 1.37
 let moderate = 1.55
 let very = 1.72
 let extreme = 1.9
 
+//calculates the calories based on just fat
 func calc_fat_cals(fat: Double, total_cals: Int) -> Int{
     return Int(fat*Double(total_cals))
 }
 
+//calculates excatly how many grams of fat in terms of calories
 func calc_fat(fat: Double, total_cals: Int) -> Int{
-
     var fat_macros = fat*Double(total_cals)
-
     fat_macros = fat_macros/9
 
     return Int(fat_macros)
 }
 
+//calculates maintanence calories given user bmr and activty level
 func calc_cals(activity: Int, bmr: Int) -> Int{
     if activity == 1{
         return Int(Double(bmr) * sedentary)
@@ -50,6 +46,7 @@ func calc_cals(activity: Int, bmr: Int) -> Int{
       
 }
 
+//mifflin aquation to solve for male and female bmr
 func mifflin_equation_female(kg: Double, cm: Double, age: Double) -> Double{
      let bmr = (9.99 * kg) + (6.25 * cm) - (4.92 * age) - 161;
     
@@ -88,18 +85,18 @@ class ViewController: UIViewController {
     }
 
     @IBAction func calcMaintanenceCals(_ sender: Any) {
-        let lbs = Double(lbsTextField.text!) ?? 0
-        let kg = lbs/2.20462
+        let lbs = Double(lbsTextField.text!) ?? 0 //takes user input fro weight
+        let kg = lbs/2.20462 //converts lbs to kg
         print(kg)
         
-        let inch = Double(heightTextField.text!) ?? 0
-        let cm = inch*2.54
+        let inch = Double(heightTextField.text!) ?? 0 //takes user input for height
+        let cm = inch*2.54 //converts inches to cm
         print(cm)
         
-        let age = Double(ageTextField.text!) ?? 0
+        let age = Double(ageTextField.text!) ?? 0 //takes user input for age
         print(age)
         
-        let gender = [1, 2]
+        let gender = [1, 2] 
         var bmr = 0.0
         if gender[genderControl.selectedSegmentIndex] == 1 {
             bmr = mifflin_equation_male(kg: kg, cm: cm, age: age)
@@ -124,7 +121,7 @@ class ViewController: UIViewController {
     
     
     @IBAction func calc_macros(_ sender: Any) {
-        let plus_minus = Int(addOrSubtractTextField.text!) ?? 0
+        let plus_minus = Int(addOrSubtractTextField.text!) ?? 0 //takes user input for how many calories they want to cut or bulk
         let total_cals = maintanence_cals+plus_minus
         let lbs = Double(lbsTextField.text!) ?? 0
         
