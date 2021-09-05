@@ -71,6 +71,7 @@ class ViewController: UIViewController {
     @IBOutlet weak var totalMaintanenceCals: UILabel!
     @IBOutlet weak var proteinControl: UISegmentedControl!
     @IBOutlet weak var addOrSubtractTextField: UITextField!
+    @IBOutlet weak var plusOrMinusControl: UISegmentedControl!
     @IBOutlet weak var fatControl: UISegmentedControl!
     @IBOutlet weak var proteinTextField: UILabel!
     @IBOutlet weak var fatTextField: UILabel!
@@ -81,20 +82,38 @@ class ViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view.
+        
+        let toolBar = UIToolbar() //this adds a toolbar to the keyboards to allow users to exit the keyboard
+        toolBar.sizeToFit()
+        
+        let doneButton =  UIBarButtonItem(barButtonSystemItem: UIBarButtonItem.SystemItem.done, target: self, action: #selector(self.doneClicked))
+        
+        toolBar.setItems([doneButton], animated: false)
+        
+        lbsTextField.inputAccessoryView = toolBar
+        heightTextField.inputAccessoryView = toolBar
+        ageTextField.inputAccessoryView = toolBar
+        addOrSubtractTextField.inputAccessoryView = toolBar
+    }
+    
+    @objc func doneClicked(){
+        view.endEditing(true)
     }
 
     @IBAction func calcMaintanenceCals(_ sender: Any) {
-        let lbs = Double(lbsTextField.text!) ?? 0 //takes user input fro weight
+        let lbs = Double(lbsTextField.text!) ?? 0 //takes user input for weight
         let kg = lbs/2.20462 //converts lbs to kg
         print(kg)
+        lbsTextField.endEditing(true)
         
         let inch = Double(heightTextField.text!) ?? 0 //takes user input for height
         let cm = inch*2.54 //converts inches to cm
         print(cm)
+        heightTextField.endEditing(true)
         
         let age = Double(ageTextField.text!) ?? 0 //takes user input for age
         print(age)
+        ageTextField.endEditing(true)
         
         let gender = [1, 2] 
         var bmr = 0.0
@@ -121,7 +140,12 @@ class ViewController: UIViewController {
     
     
     @IBAction func calc_macros(_ sender: Any) {
-        let plus_minus = Int(addOrSubtractTextField.text!) ?? 0 //takes user input for how many calories they want to cut or bulk
+        var plus_minus = Int(addOrSubtractTextField.text!) ?? 0 //takes user input for how many calories they want to cut or bulk
+        let plus_minus_val = [1, 2]
+        let vals = plus_minus_val[plusOrMinusControl.selectedSegmentIndex]
+        if vals == 2{
+            plus_minus = -1*plus_minus
+        }
         let total_cals = maintanence_cals+plus_minus
         let lbs = Double(lbsTextField.text!) ?? 0
         
